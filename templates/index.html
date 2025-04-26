@@ -49,6 +49,16 @@
             align-items: center;
             margin-bottom: 20px;
         }
+        #documentsList {
+            margin-top: 20px;
+            padding-left: 0;
+        }
+        #documentsList li {
+            background: #f1f1f1;
+            margin: 5px;
+            padding: 5px;
+            border-radius: 4px;
+        }
     </style>
 </head>
 <body>
@@ -64,12 +74,16 @@
             <input type="file" id="fileUpload" accept=".txt,.csv" /><br><br>
             <button onclick="submitQuestion()">Submit</button>
             <button onclick="clearFields()">Clear</button>
+            <button onclick="loadDocuments()">Show Documents</button>
         </div>
 
         <!-- Right Column: Answer -->
         <div class="column">
             <h3>Answer</h3>
             <div id="answer">Waiting for your question...</div>
+
+            <h3>Documents in Directory</h3>
+            <ul id="documentsList"></ul>
         </div>
     </div>
 
@@ -110,6 +124,30 @@
             document.getElementById('question').value = '';
             document.getElementById('fileUpload').value = '';
             document.getElementById('answer').innerText = 'Waiting for your question...';
+        }
+
+        // Load the list of documents when the "Show Documents" button is clicked
+        function loadDocuments() {
+            fetch('/documents')
+            .then(response => response.json())
+            .then(data => {
+                const documentsList = document.getElementById('documentsList');
+                documentsList.innerHTML = ""; // Clear previous list
+                
+                if (Array.isArray(data)) {
+                    data.forEach(doc => {
+                        const listItem = document.createElement("li");
+                        listItem.textContent = doc;
+                        documentsList.appendChild(listItem);
+                    });
+                } else {
+                    documentsList.innerHTML = "<li>No documents found.</li>";
+                }
+            })
+            .catch(error => {
+                const documentsList = document.getElementById('documentsList');
+                documentsList.innerHTML = "<li>Error fetching documents.</li>";
+            });
         }
     </script>
 </body>

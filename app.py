@@ -142,6 +142,15 @@ def get_answer_from_documents(question: str):
 def index():
     return render_template("index.html")
 
+@app.route("/documents", methods=["GET"])
+def list_documents():
+    try:
+        docs = os.listdir("/home/remlab/ps-bpt/PythonAIRAG/data")
+        return jsonify(docs)
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
+
+
 @app.route("/ask", methods=["POST"])
 def ask():
     question = request.form.get("question")
