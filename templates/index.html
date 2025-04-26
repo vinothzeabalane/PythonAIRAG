@@ -12,7 +12,7 @@
             display: flex;
             gap: 40px;
         }
-        .column {
+        .section {
             flex: 1;
         }
         textarea {
@@ -59,6 +59,10 @@
             padding: 5px;
             border-radius: 4px;
         }
+        /* Hide document section by default */
+        #documentsList {
+            display: none;
+        }
     </style>
 </head>
 <body>
@@ -66,24 +70,29 @@
         <img src="{{ url_for('static', filename='PS.jpg') }}" id="logo" alt="Logo">
         <h2>PS Runbot</h2>
     </header>
+
+    <!-- Main container with 3 sections: Ask AI, Answer, Documents -->
     <div class="container">
-        <!-- Left Column: Ask AI -->
-        <div class="column">
+        <!-- Left Column: Ask AI Section -->
+        <div class="section">
             <h3>Ask AI</h3>
             <textarea id="question" placeholder="Type your question here..."></textarea><br>
             <input type="file" id="fileUpload" accept=".txt,.csv" /><br><br>
             <button onclick="submitQuestion()">Submit</button>
             <button onclick="clearFields()">Clear</button>
-            <button onclick="loadDocuments()">Show Documents</button>
         </div>
 
-        <!-- Right Column: Answer -->
-        <div class="column">
+        <!-- Middle Column: Answer Section -->
+        <div class="section">
             <h3>Answer</h3>
             <div id="answer">Waiting for your question...</div>
+        </div>
 
+        <!-- Right Column: Documents in Directory Section -->
+        <div class="section">
             <h3>Documents in Directory</h3>
-            <ul id="documentsList" style="display: none;"></ul> <!-- Initially hidden -->
+            <ul id="documentsList"></ul> <!-- Initially hidden -->
+            <button onclick="loadDocuments()">Show Documents</button>
         </div>
     </div>
 
@@ -125,10 +134,8 @@
             document.getElementById('fileUpload').value = '';
             document.getElementById('answer').innerText = 'Waiting for your question...';
 
-            // Hide the document list and "Documents in Directory" header
-            document.getElementById('documentsList').innerHTML = '';  // Clear the list
-            document.getElementById('documentsList').style.display = 'none';  // Hide the list
-            document.querySelector('h3 + ul').style.display = 'none';  // Hide "Documents in Directory" heading
+            // Hide the document list and reset the button
+            document.getElementById('documentsList').style.display = 'none';
         }
 
         // Load the list of documents when the "Show Documents" button is clicked
@@ -137,7 +144,6 @@
             .then(response => response.json())
             .then(data => {
                 const documentsList = document.getElementById('documentsList');
-                const documentsHeader = document.querySelector('h3 + ul');
 
                 documentsList.innerHTML = ""; // Clear previous list
 
@@ -147,19 +153,17 @@
                         listItem.textContent = doc;
                         documentsList.appendChild(listItem);
                     });
-                    // Show the list and header if data is found
-                    documentsHeader.style.display = 'block';
+                    // Show the document list
                     documentsList.style.display = 'block';
                 } else {
                     documentsList.innerHTML = "<li>No documents found.</li>";
-                    documentsHeader.style.display = 'block';
                     documentsList.style.display = 'block';
                 }
             })
             .catch(error => {
                 const documentsList = document.getElementById('documentsList');
                 documentsList.innerHTML = "<li>Error fetching documents.</li>";
-                document.querySelector('h3 + ul').style.display = 'none'; // Hide the list if there is an error
+                documentsList.style.display = 'none'; // Hide document list if error
             });
         }
     </script>
