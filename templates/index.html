@@ -63,6 +63,13 @@
         #documentsList {
             display: none;
         }
+        /* Separate container for documents */
+        .documents-container {
+            border: 1px solid #ddd;
+            padding: 20px;
+            background-color: #f9f9f9;
+            border-radius: 8px;
+        }
     </style>
 </head>
 <body>
@@ -71,7 +78,7 @@
         <h2>PS Runbot</h2>
     </header>
 
-    <!-- Main container with 3 sections: Ask AI, Answer, Documents -->
+    <!-- Main container with 2 sections: Ask AI and Answer -->
     <div class="container">
         <!-- Left Column: Ask AI Section -->
         <div class="section">
@@ -87,13 +94,13 @@
             <h3>Answer</h3>
             <div id="answer">Waiting for your question...</div>
         </div>
+    </div>
 
-        <!-- Right Column: Documents in Directory Section -->
-        <div class="section">
-            <h3>Documents in Directory</h3>
-            <ul id="documentsList"></ul> <!-- Initially hidden -->
-            <button onclick="loadDocuments()">Show Documents</button>
-        </div>
+    <!-- Documents in Directory Section (Separate container) -->
+    <div class="documents-container">
+        <h3>Documents in Directory</h3>
+        <ul id="documentsList"></ul> <!-- Initially hidden -->
+        <button onclick="loadDocuments()">Show Documents</button>
     </div>
 
     <script>
