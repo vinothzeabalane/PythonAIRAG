@@ -83,7 +83,7 @@
             <div id="answer">Waiting for your question...</div>
 
             <h3>Documents in Directory</h3>
-            <ul id="documentsList"></ul>
+            <ul id="documentsList" style="display: none;"></ul> <!-- Initially hidden -->
         </div>
     </div>
 
@@ -124,6 +124,11 @@
             document.getElementById('question').value = '';
             document.getElementById('fileUpload').value = '';
             document.getElementById('answer').innerText = 'Waiting for your question...';
+
+            // Hide the document list and "Documents in Directory" header
+            document.getElementById('documentsList').innerHTML = '';  // Clear the list
+            document.getElementById('documentsList').style.display = 'none';  // Hide the list
+            document.querySelector('h3 + ul').style.display = 'none';  // Hide "Documents in Directory" heading
         }
 
         // Load the list of documents when the "Show Documents" button is clicked
@@ -132,21 +137,29 @@
             .then(response => response.json())
             .then(data => {
                 const documentsList = document.getElementById('documentsList');
+                const documentsHeader = document.querySelector('h3 + ul');
+
                 documentsList.innerHTML = ""; // Clear previous list
-                
+
                 if (Array.isArray(data)) {
                     data.forEach(doc => {
                         const listItem = document.createElement("li");
                         listItem.textContent = doc;
                         documentsList.appendChild(listItem);
                     });
+                    // Show the list and header if data is found
+                    documentsHeader.style.display = 'block';
+                    documentsList.style.display = 'block';
                 } else {
                     documentsList.innerHTML = "<li>No documents found.</li>";
+                    documentsHeader.style.display = 'block';
+                    documentsList.style.display = 'block';
                 }
             })
             .catch(error => {
                 const documentsList = document.getElementById('documentsList');
                 documentsList.innerHTML = "<li>Error fetching documents.</li>";
+                document.querySelector('h3 + ul').style.display = 'none'; // Hide the list if there is an error
             });
         }
     </script>
