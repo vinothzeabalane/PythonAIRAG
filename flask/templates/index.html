@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Ask AI</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 40px;
+        }
+        .container {
+            display: flex;
+            gap: 40px;
+        }
+        .section {
+            flex: 1;
+        }
+        textarea {
+            width: 100%;
+            height: 200px;
+            font-size: 16px;
+            padding: 10px;
+            box-sizing: border-box;
+        }
+        #answer {
+            white-space: pre-wrap;
+            font-size: 16px;
+            padding: 10px;
+            background-color: #f5f5f5;
+            border: 1px solid #ddd;
+            height: 200px;
+            overflow-y: auto;
+        }
+        button {
+            padding: 10px 20px;
+            font-size: 16px;
+            margin-right: 10px;
+            margin-top: 10px;
+        }
+        h2 {
+            margin-top: 0;
+        }
+        #logo {
+            height: 60px;
+            margin-right: 20px;
+        }
+        header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+        #documentsList {
+            margin-top: 20px;
+            padding-left: 0;
+        }
+        #documentsList li {
+            background: #f1f1f1;
+            margin: 5px;
+            padding: 5px;
+            border-radius: 4px;
+        }
+        /* Hide document section by default */
+        #documentsList {
+            display: none;
+        }
+        /* Separate container for documents */
+        .documents-container {
+            border: 1px solid #ddd;
+            padding: 20px;
+            background-color: #f9f9f9;
+            border-radius: 8px;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <img src="{{ url_for('static', filename='PS.jpg') }}" id="logo" alt="Logo">
+        <h2>PS Runbot</h2>
+    </header>
+
+    <!-- Main container with 2 sections: Ask AI and Answer -->
+    <div class="container">
+        <!-- Left Column: Ask AI Section -->
+        <div class="section">
+            <h3>Ask AI</h3>
+            <textarea id="question" placeholder="Type your question here..."></textarea><br>
+            <input type="file" id="fileUpload" accept=".txt,.csv" /><br><br>
+            <button onclick="submitQuestion()">Submit</button>
+            <button onclick="clearFields()">Clear</button>
+        </div>
+
+        <!-- Middle Column: Answer Section -->
+        <div class="section">
+            <h3>Answer</h3>
+            <div id="answer">Waiting for your question...</div>
+        </div>
+    </div>
+
+    <!-- Documents in Directory Section (Separate container) -->
+    <div class="documents-container">
+        <h3>Documents in Directory</h3>
+        <ul id="documentsList"></ul> <!-- Initially hidden -->
+        <button onclick="loadDocuments()">Show Documents</button>
+    </div>
+
+    <script>
+        function submitQuestion() {
+            const question = document.getElementById('question').value;
+            const fileInput = document.getElementById('fileUpload');
+            const file = fileInput.files[0];
+
+            if (!question.trim() && !file) {
+                alert("Please enter a question or upload a file.");
+                return;
+            }
+
+            document.getElementById('answer').innerText = 'Thinking...';
+
+            let formData = new FormData();
+            formData.append('question', question);
+            if (file) {
+                formData.append('file', file);
+            }
+
+            fetch('/ask', {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => response.json())
+            .then(data => {
+                document.getElementById('answer').innerText =
+                    `Answer (took ${data.time} min:sec:ms):\n\n${data.answer}`;
+            })
+            .catch(error => {
+                document.getElementById('answer').innerText = 'Error: ' + error;
+            });
+        }
+
+        function clearFields() {
+            document.getElementById('question').value = '';
+            document.getElementById('fileUpload').value = '';
+            document.getElementById('answer').innerText = 'Waiting for your question...';
+
+            // Hide the document list and reset the button
+            document.getElementById('documentsList').style.display = 'none';
+        }
+
+        // Load the list of documents when the "Show Documents" button is clicked
+        function loadDocuments() {
+            fetch('/documents')
+            .then(response => response.json())
+            .then(data => {
+                const documentsList = document.getElementById('documentsList');
+
+                documentsList.innerHTML = ""; // Clear previous list
+
+                if (Array.isArray(data)) {
+                    data.forEach(doc => {
+                        const listItem = document.createElement("li");
+                        listItem.textContent = doc;
+                        documentsList.appendChild(listItem);
+                    });
+                    // Show the document list
+                    documentsList.style.display = 'block';
+                } else {
+                    documentsList.innerHTML = "<li>No documents found.</li>";
+                    documentsList.style.display = 'block';
+                }
+            })
+            .catch(error => {
+                const documentsList = document.getElementById('documentsList');
+                documentsList.innerHTML = "<li>Error fetching documents.</li>";
+                documentsList.style.display = 'none'; // Hide document list if error
+            });
+        }
+    </script>
+</body>
+</html>

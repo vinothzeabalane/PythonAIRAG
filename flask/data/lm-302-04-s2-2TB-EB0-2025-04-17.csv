@@ -1,0 +1,129 @@
+﻿Boot Entry,Iteration:  1 ,Iteration:  2 ,Iteration:  3 ,Iteration:  4 ,Iteration:  5 
+SBL_SPI_INIT,boot entry type : 0 ,boot entry type : 0 ,boot entry type : 0 ,boot entry type : 0 ,boot entry type : 0 
+        ,start time : 00:00:00.000.039  ,start time : 00:00:00.000.040  ,start time : 00:00:00.000.042  ,start time : 00:00:00.000.040  ,start time : 00:00:00.000.041  
+        ,time elapsed in ss.ms.us : 00.000.079 ,time elapsed in ss.ms.us : 00.000.079 ,time elapsed in ss.ms.us : 00.000.079 ,time elapsed in ss.ms.us : 00.000.079 ,time elapsed in ss.ms.us : 00.000.079 
+        ,                                         ,                                         ,                                         ,                                         ,                                         
+SBL_FCONFIG_LOAD,boot entry type : 1 ,boot entry type : 1 ,boot entry type : 1 ,boot entry type : 1 ,boot entry type : 1 
+        ,start time : 00:00:00.008.318  ,start time : 00:00:00.008.319  ,start time : 00:00:00.008.320  ,start time : 00:00:00.008.320  ,start time : 00:00:00.008.320  
+        ,time elapsed in ss.ms.us : 00.001.656 ,time elapsed in ss.ms.us : 00.001.656 ,time elapsed in ss.ms.us : 00.001.656 ,time elapsed in ss.ms.us : 00.001.657 ,time elapsed in ss.ms.us : 00.001.656 
+        ,                                         ,                                         ,                                         ,                                         ,                                         
+SBL_CRYPTO_INIT,boot entry type : 2 ,boot entry type : 2 ,boot entry type : 2 ,boot entry type : 2 ,boot entry type : 2 
+        ,start time : 00:00:00.000.123  ,start time : 00:00:00.000.125  ,start time : 00:00:00.000.126  ,start time : 00:00:00.000.124  ,start time : 00:00:00.000.126  
+        ,time elapsed in ss.ms.us : 00.004.879 ,time elapsed in ss.ms.us : 00.004.879 ,time elapsed in ss.ms.us : 00.004.878 ,time elapsed in ss.ms.us : 00.004.880 ,time elapsed in ss.ms.us : 00.004.879 
+        ,                                         ,                                         ,                                         ,                                         ,                                         
+SBL_CRITICAL_BOOT_LOAD,boot entry type : 3 ,boot entry type : 3 ,boot entry type : 3 ,boot entry type : 3 ,boot entry type : 3 
+        ,start time : 00:00:00.005.003  ,start time : 00:00:00.005.005  ,start time : 00:00:00.005.006  ,start time : 00:00:00.005.005  ,start time : 00:00:00.005.006  
+        ,time elapsed in ss.ms.us : 00.000.000 ,time elapsed in ss.ms.us : 00.000.000 ,time elapsed in ss.ms.us : 00.000.000 ,time elapsed in ss.ms.us : 00.000.000 ,time elapsed in ss.ms.us : 00.000.000 
+        ,                                         ,                                         ,                                         ,                                         ,                                         
+SBL_UFH_LOAD_AND_VERIFY,boot entry type : 4 ,boot entry type : 4 ,boot entry type : 4 ,boot entry type : 4 ,boot entry type : 4 
+        ,start time : 00:00:00.005.004  ,start time : 00:00:00.005.005  ,start time : 00:00:00.005.007  ,start time : 00:00:00.005.006  ,start time : 00:00:00.005.007  
+        ,time elapsed in ss.ms.us : 00.003.313 ,time elapsed in ss.ms.us : 00.003.313 ,time elapsed in ss.ms.us : 00.003.313 ,time elapsed in ss.ms.us : 00.003.313 ,time elapsed in ss.ms.us : 00.003.312 
+        ,                                         ,                                         ,                                         ,                                         ,                                         
+SBL_DIGEST_COMPUTE,boot entry type : 5 ,boot entry type : 5 ,boot entry type : 5 ,boot entry type : 5 ,boot entry type : 5 
+        ,start time : 00:00:00.009.975  ,start time : 00:00:00.009.976  ,start time : 00:00:00.009.977  ,start time : 00:00:00.009.977  ,start time : 00:00:00.009.977  
+        ,time elapsed in ss.ms.us : 00.031.592 ,time elapsed in ss.ms.us : 00.031.592 ,time elapsed in ss.ms.us : 00.031.592 ,time elapsed in ss.ms.us : 00.031.593 ,time elapsed in ss.ms.us : 00.031.592 
+        ,                                         ,                                         ,                                         ,                                         ,                                         
+SBL_LOAD_TBL_IMAGE,boot entry type : 6 ,boot entry type : 6 ,boot entry type : 6 ,boot entry type : 6 ,boot entry type : 6 
+        ,start time : 00:00:00.041.568  ,start time : 00:00:00.041.569  ,start time : 00:00:00.041.570  ,start time : 00:00:00.041.571  ,start time : 00:00:00.041.570  
+        ,time elapsed in ss.ms.us : 00.017.066 ,time elapsed in ss.ms.us : 00.017.067 ,time elapsed in ss.ms.us : 00.017.067 ,time elapsed in ss.ms.us : 00.017.066 ,time elapsed in ss.ms.us : 00.017.067 
+        ,                                         ,                                         ,                                         ,                                         ,                                         
+SBL_RIOT,boot entry type : 7 ,boot entry type : 7 ,boot entry type : 7 ,boot entry type : 7 ,boot entry type : 7 
+        ,start time : 00:00:00.058.636  ,start time : 00:00:00.058.638  ,start time : 00:00:00.058.638  ,start time : 00:00:00.058.639  ,start time : 00:00:00.058.638  
+        ,time elapsed in ss.ms.us : 00.013.492 ,time elapsed in ss.ms.us : 00.013.520 ,time elapsed in ss.ms.us : 00.013.570 ,time elapsed in ss.ms.us : 00.013.560 ,time elapsed in ss.ms.us : 00.013.603 
+        ,                                         ,                                         ,                                         ,                                         ,                                         
+SBL_TOTAL,boot entry type : 8 ,boot entry type : 8 ,boot entry type : 8 ,boot entry type : 8 ,boot entry type : 8 
+        ,start time : 00:00:00.000.004  ,start time : 00:00:00.000.004  ,start time : 00:00:00.000.004  ,start time : 00:00:00.000.004  ,start time : 00:00:00.000.004  
+        ,time elapsed in ss.ms.us : 00.072.125 ,time elapsed in ss.ms.us : 00.072.155 ,time elapsed in ss.ms.us : 00.072.206 ,time elapsed in ss.ms.us : 00.072.196 ,time elapsed in ss.ms.us : 00.072.238 
+        ,                                         ,                                         ,                                         ,                                         ,                                         
+TBL_SPI_INIT,boot entry type : 9 ,boot entry type : 9 ,boot entry type : 9 ,boot entry type : 9 ,boot entry type : 9 
+        ,start time : 00:00:00.072.725  ,start time : 00:00:00.072.754  ,start time : 00:00:00.072.802  ,start time : 00:00:00.072.797  ,start time : 00:00:00.072.840  
+        ,time elapsed in ss.ms.us : 00.000.057 ,time elapsed in ss.ms.us : 00.000.056 ,time elapsed in ss.ms.us : 00.000.056 ,time elapsed in ss.ms.us : 00.000.057 ,time elapsed in ss.ms.us : 00.000.057 
+        ,                                         ,                                         ,                                         ,                                         ,                                         
+TBL_FCONFIG_LOAD,boot entry type : 10 ,boot entry type : 10 ,boot entry type : 10 ,boot entry type : 10 ,boot entry type : 10 
+        ,start time : 00:00:00.075.924  ,start time : 00:00:00.075.953  ,start time : 00:00:00.076.000  ,start time : 00:00:00.075.996  ,start time : 00:00:00.076.040  
+        ,time elapsed in ss.ms.us : 00.000.123 ,time elapsed in ss.ms.us : 00.000.123 ,time elapsed in ss.ms.us : 00.000.123 ,time elapsed in ss.ms.us : 00.000.123 ,time elapsed in ss.ms.us : 00.000.124 
+        ,                                         ,                                         ,                                         ,                                         ,                                         
+TBL_PCIE_INIT,boot entry type : 11 ,boot entry type : 11 ,boot entry type : 11 ,boot entry type : 11 ,boot entry type : 11 
+        ,start time : 00:00:00.076.051  ,start time : 00:00:00.076.080  ,start time : 00:00:00.076.128  ,start time : 00:00:00.076.124  ,start time : 00:00:00.076.168  
+        ,time elapsed in ss.ms.us : 00.002.865 ,time elapsed in ss.ms.us : 00.002.809 ,time elapsed in ss.ms.us : 00.002.809 ,time elapsed in ss.ms.us : 00.002.809 ,time elapsed in ss.ms.us : 00.002.864 
+        ,                                         ,                                         ,                                         ,                                         ,                                         
+TBL_LOAD_PBL_IMAGE,boot entry type : 12 ,boot entry type : 12 ,boot entry type : 12 ,boot entry type : 12 ,boot entry type : 12 
+        ,start time : 00:00:00.078.917  ,start time : 00:00:00.078.891  ,start time : 00:00:00.078.938  ,start time : 00:00:00.078.935  ,start time : 00:00:00.079.033  
+        ,time elapsed in ss.ms.us : 00.048.710 ,time elapsed in ss.ms.us : 00.048.710 ,time elapsed in ss.ms.us : 00.048.709 ,time elapsed in ss.ms.us : 00.048.710 ,time elapsed in ss.ms.us : 00.048.709 
+        ,                                         ,                                         ,                                         ,                                         ,                                         
+TBL_RIOT,boot entry type : 13 ,boot entry type : 13 ,boot entry type : 13 ,boot entry type : 13 ,boot entry type : 13 
+        ,start time : 00:00:00.127.628  ,start time : 00:00:00.127.601  ,start time : 00:00:00.127.648  ,start time : 00:00:00.127.645  ,start time : 00:00:00.127.743  
+        ,time elapsed in ss.ms.us : 00.001.513 ,time elapsed in ss.ms.us : 00.001.512 ,time elapsed in ss.ms.us : 00.001.513 ,time elapsed in ss.ms.us : 00.001.514 ,time elapsed in ss.ms.us : 00.001.513 
+        ,                                         ,                                         ,                                         ,                                         ,                                         
+TBL_PRETOTAL,boot entry type : 14 ,boot entry type : 14 ,boot entry type : 14 ,boot entry type : 14 ,boot entry type : 14 
+        ,start time : 00:00:00.072.129  ,start time : 00:00:00.072.159  ,start time : 00:00:00.072.210  ,start time : 00:00:00.072.200  ,start time : 00:00:00.072.242  
+        ,time elapsed in ss.ms.us : 00.000.143 ,time elapsed in ss.ms.us : 00.000.143 ,time elapsed in ss.ms.us : 00.000.143 ,time elapsed in ss.ms.us : 00.000.143 ,time elapsed in ss.ms.us : 00.000.143 
+        ,                                         ,                                         ,                                         ,                                         ,                                         
+TBL_TOTAL,boot entry type : 15 ,boot entry type : 15 ,boot entry type : 15 ,boot entry type : 15 ,boot entry type : 15 
+        ,start time : 00:00:00.072.632  ,start time : 00:00:00.072.661  ,start time : 00:00:00.072.709  ,start time : 00:00:00.072.704  ,start time : 00:00:00.072.747  
+        ,time elapsed in ss.ms.us : 00.056.653 ,time elapsed in ss.ms.us : 00.056.596 ,time elapsed in ss.ms.us : 00.056.595 ,time elapsed in ss.ms.us : 00.056.599 ,time elapsed in ss.ms.us : 00.056.652 
+        ,                                         ,                                         ,                                         ,                                         ,                                         
+PBL_SPI_INIT,boot entry type : 16 ,boot entry type : 16 ,boot entry type : 16 ,boot entry type : 16 ,boot entry type : 16 
+        ,start time : 00:00:00.129.258  ,start time : 00:00:00.129.231  ,start time : 00:00:00.129.278  ,start time : 00:00:00.129.276  ,start time : 00:00:00.129.373  
+        ,time elapsed in ss.ms.us : 00.000.062 ,time elapsed in ss.ms.us : 00.000.062 ,time elapsed in ss.ms.us : 00.000.062 ,time elapsed in ss.ms.us : 00.000.062 ,time elapsed in ss.ms.us : 00.000.062 
+        ,                                         ,                                         ,                                         ,                                         ,                                         
+PBL_PARSE_FCONFIG,boot entry type : 17 ,boot entry type : 17 ,boot entry type : 17 ,boot entry type : 17 ,boot entry type : 17 
+        ,start time : 00:00:00.129.446  ,start time : 00:00:00.129.417  ,start time : 00:00:00.129.465  ,start time : 00:00:00.129.464  ,start time : 00:00:00.129.560  
+        ,time elapsed in ss.ms.us : 00.000.066 ,time elapsed in ss.ms.us : 00.000.066 ,time elapsed in ss.ms.us : 00.000.066 ,time elapsed in ss.ms.us : 00.000.066 ,time elapsed in ss.ms.us : 00.000.066 
+        ,                                         ,                                         ,                                         ,                                         ,                                         
+PBL_PMIC_INIT,boot entry type : 18 ,boot entry type : 18 ,boot entry type : 18 ,boot entry type : 18 ,boot entry type : 18 
+        ,start time : 00:00:00.129.512  ,start time : 00:00:00.129.484  ,start time : 00:00:00.129.532  ,start time : 00:00:00.129.530  ,start time : 00:00:00.129.626  
+        ,time elapsed in ss.ms.us : 00.014.064 ,time elapsed in ss.ms.us : 00.014.062 ,time elapsed in ss.ms.us : 00.014.063 ,time elapsed in ss.ms.us : 00.014.063 ,time elapsed in ss.ms.us : 00.014.064 
+        ,                                         ,                                         ,                                         ,                                         ,                                         
+PBL_DRAM_INIT,boot entry type : 19 ,boot entry type : 19 ,boot entry type : 19 ,boot entry type : 19 ,boot entry type : 19 
+        ,start time : 00:00:00.143.577  ,start time : 00:00:00.143.547  ,start time : 00:00:00.143.596  ,start time : 00:00:00.143.595  ,start time : 00:00:00.143.691  
+        ,time elapsed in ss.ms.us : 00.043.820 ,time elapsed in ss.ms.us : 00.043.815 ,time elapsed in ss.ms.us : 00.043.822 ,time elapsed in ss.ms.us : 00.043.816 ,time elapsed in ss.ms.us : 00.043.812 
+        ,                                         ,                                         ,                                         ,                                         ,                                         
+PBL_SCRUB_MAINFW_DRAM,boot entry type : 20 ,boot entry type : 20 ,boot entry type : 20 ,boot entry type : 20 ,boot entry type : 20 
+        ,start time : 00:00:00.187.398  ,start time : 00:00:00.187.363  ,start time : 00:00:00.187.419  ,start time : 00:00:00.187.411  ,start time : 00:00:00.187.504  
+        ,time elapsed in ss.ms.us : 00.046.667 ,time elapsed in ss.ms.us : 00.046.668 ,time elapsed in ss.ms.us : 00.046.667 ,time elapsed in ss.ms.us : 00.046.667 ,time elapsed in ss.ms.us : 00.046.667 
+        ,                                         ,                                         ,                                         ,                                         ,                                         
+PBL_CRYPTO_INIT,boot entry type : 21 ,boot entry type : 21 ,boot entry type : 21 ,boot entry type : 21 ,boot entry type : 21 
+        ,start time : 00:00:00.239.252  ,start time : 00:00:00.239.217  ,start time : 00:00:00.239.272  ,start time : 00:00:00.239.266  ,start time : 00:00:00.239.358  
+        ,time elapsed in ss.ms.us : 00.003.312 ,time elapsed in ss.ms.us : 00.003.315 ,time elapsed in ss.ms.us : 00.003.312 ,time elapsed in ss.ms.us : 00.003.313 ,time elapsed in ss.ms.us : 00.003.314 
+        ,                                         ,                                         ,                                         ,                                         ,                                         
+PBL_NAND_INIT,boot entry type : 22 ,boot entry type : 22 ,boot entry type : 22 ,boot entry type : 22 ,boot entry type : 22 
+        ,start time : 00:00:00.242.564  ,start time : 00:00:00.242.532  ,start time : 00:00:00.242.585  ,start time : 00:00:00.242.579  ,start time : 00:00:00.242.672  
+        ,time elapsed in ss.ms.us : 00.029.901 ,time elapsed in ss.ms.us : 00.029.909 ,time elapsed in ss.ms.us : 00.029.929 ,time elapsed in ss.ms.us : 00.029.874 ,time elapsed in ss.ms.us : 00.029.960 
+        ,                                         ,                                         ,                                         ,                                         ,                                         
+PBL_LOAD_MAIN_FW,boot entry type : 23 ,boot entry type : 23 ,boot entry type : 23 ,boot entry type : 23 ,boot entry type : 23 
+        ,start time : 00:00:00.272.488  ,start time : 00:00:00.272.463  ,start time : 00:00:00.272.536  ,start time : 00:00:00.272.475  ,start time : 00:00:00.272.655  
+        ,time elapsed in ss.ms.us : 00.221.084 ,time elapsed in ss.ms.us : 00.220.866 ,time elapsed in ss.ms.us : 00.221.145 ,time elapsed in ss.ms.us : 00.221.040 ,time elapsed in ss.ms.us : 00.220.874 
+        ,                                         ,                                         ,                                         ,                                         ,                                         
+PBL_RIOT,boot entry type : 24 ,boot entry type : 24 ,boot entry type : 24 ,boot entry type : 24 ,boot entry type : 24 
+        ,start time : 00:00:00.493.580  ,start time : 00:00:00.493.336  ,start time : 00:00:00.493.689  ,start time : 00:00:00.493.523  ,start time : 00:00:00.493.535  
+        ,time elapsed in ss.ms.us : 00.001.723 ,time elapsed in ss.ms.us : 00.001.722 ,time elapsed in ss.ms.us : 00.001.725 ,time elapsed in ss.ms.us : 00.001.724 ,time elapsed in ss.ms.us : 00.001.723 
+        ,                                         ,                                         ,                                         ,                                         ,                                         
+PBL_WAKE_CORES_JUMP,boot entry type : 25 ,boot entry type : 25 ,boot entry type : 25 ,boot entry type : 25 ,boot entry type : 25 
+        ,start time : 00:00:00.495.330  ,start time : 00:00:00.495.085  ,start time : 00:00:00.495.441  ,start time : 00:00:00.495.274  ,start time : 00:00:00.495.286  
+        ,time elapsed in ss.ms.us : 00.000.007 ,time elapsed in ss.ms.us : 00.000.008 ,time elapsed in ss.ms.us : 00.000.008 ,time elapsed in ss.ms.us : 00.000.008 ,time elapsed in ss.ms.us : 00.000.008 
+        ,                                         ,                                         ,                                         ,                                         ,                                         
+PBL_TOTAL,boot entry type : 26 ,boot entry type : 26 ,boot entry type : 26 ,boot entry type : 26 ,boot entry type : 26 
+        ,start time : 00:00:00.129.143  ,start time : 00:00:00.129.115  ,start time : 00:00:00.129.162  ,start time : 00:00:00.129.161  ,start time : 00:00:00.129.257  
+        ,time elapsed in ss.ms.us : 00.366.194 ,time elapsed in ss.ms.us : 00.365.978 ,time elapsed in ss.ms.us : 00.366.287 ,time elapsed in ss.ms.us : 00.366.121 ,time elapsed in ss.ms.us : 00.366.036 
+        ,                                         ,                                         ,                                         ,                                         ,                                         
+BOOTLOADERS_TOTAL,boot entry type : 27 ,boot entry type : 27 ,boot entry type : 27 ,boot entry type : 27 ,boot entry type : 27 
+        ,start time : 00:00:00.000.000  ,start time : 00:00:00.000.000  ,start time : 00:00:00.000.000  ,start time : 00:00:00.000.000  ,start time : 00:00:00.000.000  
+        ,time elapsed in ss.ms.us : 00.494.972 ,time elapsed in ss.ms.us : 00.494.729 ,time elapsed in ss.ms.us : 00.495.088 ,time elapsed in ss.ms.us : 00.494.916 ,time elapsed in ss.ms.us : 00.494.926 
+        ,                                         ,                                         ,                                         ,                                         ,                                         
+MAINFW_PRE_TIMER_INIT,boot entry type : 28 ,boot entry type : 28 ,boot entry type : 28 ,boot entry type : 28 ,boot entry type : 28 
+        ,start time : 00:00:00.792.718  ,start time : 00:00:00.792.312  ,start time : 00:00:00.792.885  ,start time : 00:00:00.792.613  ,start time : 00:00:00.792.640  
+        ,time elapsed in ss.ms.us : 00.229.942 ,time elapsed in ss.ms.us : 00.232.525 ,time elapsed in ss.ms.us : 00.226.733 ,time elapsed in ss.ms.us : 00.232.669 ,time elapsed in ss.ms.us : 00.226.521 
+        ,                                         ,                                         ,                                         ,                                         ,                                         
+MAINFW_PRE_PMU_INIT,boot entry type : 29 ,boot entry type : 29 ,boot entry type : 29 ,boot entry type : 29 ,boot entry type : 29 
+        ,start time : 00:00:00.639.171  ,start time : 00:00:00.640.531  ,start time : 00:00:00.637.270  ,start time : 00:00:00.640.810  ,start time : 00:00:00.636.984  
+        ,time elapsed in ss.ms.us : 00.018.505 ,time elapsed in ss.ms.us : 00.018.484 ,time elapsed in ss.ms.us : 00.018.475 ,time elapsed in ss.ms.us : 00.018.515 ,time elapsed in ss.ms.us : 00.018.829 
+        ,                                         ,                                         ,                                         ,                                         ,                                         
+MAINFW_PRE_KERNEL_ENTER_SCHEDULER,boot entry type : 30 ,boot entry type : 30 ,boot entry type : 30 ,boot entry type : 30 ,boot entry type : 30 
+        ,start time : 00:00:00.000.002  ,start time : 00:00:00.000.002  ,start time : 00:00:00.000.002  ,start time : 00:00:00.000.002  ,start time : 00:00:00.000.002  
+        ,time elapsed in ss.ms.us : 00.176.004 ,time elapsed in ss.ms.us : 00.176.354 ,time elapsed in ss.ms.us : 00.176.302 ,time elapsed in ss.ms.us : 00.176.268 ,time elapsed in ss.ms.us : 00.176.429 
+        ,                                         ,                                         ,                                         ,                                         ,                                         
+OVERALL_TOTAL,boot entry type : 31 ,boot entry type : 31 ,boot entry type : 31 ,boot entry type : 31 ,boot entry type : 31 
+        ,start time : 00:00:00.000.000  ,start time : 00:00:00.000.000  ,start time : 00:00:00.000.000  ,start time : 00:00:00.000.000  ,start time : 00:00:00.000.000  
+        ,time elapsed in ss.ms.us : 00.919.423 ,time elapsed in ss.ms.us : 00.922.092 ,time elapsed in ss.ms.us : 00.916.598 ,time elapsed in ss.ms.us : 00.922.368 ,time elapsed in ss.ms.us : 00.916.705 
+        ,                                         ,                                         ,                                         ,                                         ,                                         
