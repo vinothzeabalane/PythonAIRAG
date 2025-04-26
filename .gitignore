@@ -1,0 +1,43 @@
+# Ignore virtual environments
+.venv/
+venv/
+
+# Byte-compiled / cache files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# VS Code / PyCharm
+.vscode/
+.idea/
+
+# Environment variables
+.env
+.env.*
+
+# Logs
+*.log
+
+# OS-specific
+.DS_Store
+Thumbs.db
+
+# Jupyter Notebook checkpoints
+.ipynb_checkpoints/
+
+# Testing
+htmlcov/
+.tox/
+.nox/
+.coverage
+coverage.xml
+.cache
+
+# MyPy, Pyre, Pytype
+.mypy_cache/
+.pyre/
+.pytype/
+
+server_info.md
+
+/data
