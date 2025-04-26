@@ -112,7 +112,7 @@ def get_answer_from_documents(question: str):
     document_embeddings = [embedding_model.embed_query(doc.page_content) for doc in documents]
     
     logging.info(f"Generated embeddings for {len(document_embeddings)} chunks.")
-    logging.info(f"Embeddings preview: {document_embeddings[:5]}")  # Log the first 5 embeddings for preview
+    logging.debug(f"Embeddings preview: {document_embeddings[:5]}")  # Log the first 5 embeddings for preview
 
     dim = len(document_embeddings[0])
     index = faiss.IndexFlatL2(dim)
