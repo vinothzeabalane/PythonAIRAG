@@ -116,13 +116,12 @@ def get_answer_from_documents(question: str, vector_db):
 def index():
     return render_template("index.html")
 
-@app.route("/documents", methods=["GET"])
-def list_documents():
-    try:
-        docs = os.listdir("/data/flask/data")
-        return jsonify(docs)
-    except Exception as e:
-        return jsonify({"error": str(e)}), 500
+@app.route('/documents')
+def get_documents():
+    # Assuming files are stored in the '/data/flask/data' folder
+    documents = os.listdir('/data/flask/data')
+    return jsonify(documents)
+
 
 @app.route("/delete", methods=["POST"])
 def delete_document():

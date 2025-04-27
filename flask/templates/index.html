@@ -191,7 +191,9 @@
         </div>
         <div class="section">
             <h3>Documents</h3>
-            <div class="documents-container">
+            <button id="toggleDocumentsButton" onclick="toggleDocuments()">Show Documents</button>
+
+            <div id="documentsContainer" class="documents-container" style="display:none;">
                 <ul id="documentsList"></ul>
             </div>
         </div>
@@ -209,17 +211,21 @@
                 .then(response => response.json())
                 .then(docs => {
                     const listContainer = document.getElementById("documentsList");
-                    listContainer.innerHTML = '';
+                    listContainer.innerHTML = '';  // Clear previous list
 
-                    docs.forEach(doc => {
-                        const listItem = document.createElement('li');
-                        listItem.textContent = doc;
-                        const deleteButton = document.createElement('button');
-                        deleteButton.textContent = "Delete";
-                        deleteButton.onclick = () => deleteDocument(doc);
-                        listItem.appendChild(deleteButton);
-                        listContainer.appendChild(listItem);
-                    });
+                    if (docs.length === 0) {
+                        listContainer.innerHTML = '<li>No documents found.</li>';
+                    } else {
+                        docs.forEach(doc => {
+                            const listItem = document.createElement('li');
+                            listItem.textContent = doc;
+                            const deleteButton = document.createElement('button');
+                            deleteButton.textContent = "Delete";
+                            deleteButton.onclick = () => deleteDocument(doc);
+                            listItem.appendChild(deleteButton);
+                            listContainer.appendChild(listItem);
+                        });
+                    }
                 })
                 .catch(error => {
                     alert("Error loading documents: " + error);
@@ -277,7 +283,19 @@
             alert("Undo deletion is not implemented yet.");
         }
 
-        loadDocuments();  // Load documents when the page loads
+        function toggleDocuments() {
+            const documentsContainer = document.getElementById("documentsContainer");
+            const toggleButton = document.getElementById("toggleDocumentsButton");
+
+            if (documentsContainer.style.display === "none") {
+                documentsContainer.style.display = "block";
+                toggleButton.textContent = "Hide Documents";
+                loadDocuments(); // Load documents when showing
+            } else {
+                documentsContainer.style.display = "none";
+                toggleButton.textContent = "Show Documents";
+            }
+        }
 
         // Form submission to ask a question
         document.getElementById("askForm").addEventListener("submit", function(event) {
@@ -324,6 +342,8 @@
                 alert("Error asking the question.");
             });
         });
+
+        loadDocuments();  // Load documents when the page loads
     </script>
 </body>
 </html>
