@@ -1,7 +1,6 @@
 import logging
 from flask import Flask, render_template, request, jsonify
 import os
-import requests
 import numpy as np
 from typing import List
 from langchain_core.language_models import LLM
@@ -19,6 +18,10 @@ import faiss
 from langchain_community.vectorstores import FAISS
 from langchain_community.docstore.in_memory import InMemoryDocstore
 import time
+import requests  # Ensure this import is included
+
+# Set environment variable to enforce offline mode for HuggingFace
+os.environ["HF_HUB_OFFLINE"] = "1"  # Force offline mode
 
 # Set up logging with INFO level
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
@@ -85,7 +88,7 @@ def load_documents(directory="/data/flask/data"):
 
             # Load the document and log the number of documents loaded
             docs = loader.load()
-            logging.info(f"✅Loaded {len(docs)} document(s) from {file}")
+            logging.info(f"✅ Loaded {len(docs)} document(s) from {file}")
             logging.info(f"Document preview: {docs[0].page_content[:200]}")  # Log first 200 characters for preview
 
             # Split the document into chunks
@@ -101,33 +104,35 @@ def load_documents(directory="/data/flask/data"):
     logging.info(f"Total number of chunks loaded: {len(all_docs)}")
     return all_docs
 
+# 🔹 Preload embeddings into memory at the start (so they are not recalculated each time)
+embedding_model = HuggingFaceEmbeddings(model_name="sentence-transformers/all-MiniLM-L6-v2")
+logging.info("Embedding model loaded.")
+
+# Generate embeddings for all documents once and cache them in memory
+documents = load_documents()
+document_embeddings = [embedding_model.embed_query(doc.page_content) for doc in documents]
+logging.info(f"Generated embeddings for {len(document_embeddings)} chunks.")
+
+# Initialize the FAISS index and add the embeddings
+dim = len(document_embeddings[0])
+index = faiss.IndexFlatL2(dim)
+embeddings_np = np.array(document_embeddings).astype('float32')
+index.add(embeddings_np)
+
+# Set up the FAISS vector store
+docstore = InMemoryDocstore({str(i): doc for i, doc in enumerate(documents)})
+index_to_docstore_id = {i: str(i) for i in range(len(documents))}
+
+vector_db = FAISS(
+    embedding_function=embedding_model,
+    index=index,
+    docstore=docstore,
+    index_to_docstore_id=index_to_docstore_id
+)
+
 # 🔹 Main RAG pipeline function
 def get_answer_from_documents(question: str):
     logging.info(f"Processing question: {question}")
-
-    documents = load_documents()
-    logging.info(f"Total number of chunks to process: {len(documents)}")
-
-    embedding_model = HuggingFaceEmbeddings(model_name="sentence-transformers/all-MiniLM-L6-v2")
-    document_embeddings = [embedding_model.embed_query(doc.page_content) for doc in documents]
-    
-    logging.info(f"Generated embeddings for {len(document_embeddings)} chunks.")
-    logging.debug(f"Embeddings preview: {document_embeddings[:5]}")  # Log the first 5 embeddings for preview
-
-    dim = len(document_embeddings[0])
-    index = faiss.IndexFlatL2(dim)
-    embeddings_np = np.array(document_embeddings).astype('float32')
-    index.add(embeddings_np)
-
-    docstore = InMemoryDocstore({str(i): doc for i, doc in enumerate(documents)})
-    index_to_docstore_id = {i: str(i) for i in range(len(documents))}
-    
-    vector_db = FAISS(
-        embedding_function=embedding_model,
-        index=index,
-        docstore=docstore,
-        index_to_docstore_id=index_to_docstore_id
-    )
 
     llm = LocalOllamaLLM()
     rag_chain = RetrievalQA.from_chain_type(llm=llm, retriever=vector_db.as_retriever())
@@ -149,7 +154,6 @@ def list_documents():
         return jsonify(docs)
     except Exception as e:
         return jsonify({"error": str(e)}), 500
-
 
 @app.route("/ask", methods=["POST"])
 def ask():
