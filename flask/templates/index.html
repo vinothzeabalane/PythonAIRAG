@@ -34,17 +34,28 @@
         /* Layout styling for the main container */
         .container {
             display: flex;
-            justify-content: space-between;
+            flex-direction: column;
             gap: 30px;
             margin: 20px 40px;
         }
 
+        .ask-section {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .answer-section {
+            display: flex;
+            gap: 30px;
+        }
+
         .section {
-            flex: 1;
             background: white;
             padding: 20px;
             border-radius: 8px;
             box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            width: 100%;
         }
 
         h3 {
@@ -94,6 +105,8 @@
             height: 200px;
             overflow-y: auto;
             border-radius: 8px;
+            flex: 1; /* Ensures the answer section takes up remaining space */
+            cursor: pointer; /* Indicates that the answer can be clicked for copying */
         }
 
         /* Documents list styling */
@@ -173,24 +186,28 @@
         <h2>PS Runbot</h2>
     </header>
     <div class="container">
-        <div class="section">
-            <h3>Ask a Question</h3>
-            <form id="askForm" enctype="multipart/form-data">
-                <textarea id="question" name="question" placeholder="Ask your question here..."></textarea>
-                <input type="file" id="file" name="file">
-                <button type="submit">Ask</button>
-            </form>
+        <div class="ask-section">
+            <div class="section">
+                <h3>Ask a Question</h3>
+                <form id="askForm" enctype="multipart/form-data">
+                    <textarea id="question" name="question" placeholder="Ask your question here..."></textarea>
+                    <input type="file" id="file" name="file">
+                    <button type="submit">Ask</button>
+                    <button type="button" id="clearButton" onclick="clearFields()">Clear</button> <!-- Clear Button -->
+                </form>
 
-            <!-- Thinking/Loading Message -->
-            <div id="loadingMessage" style="display:none; text-align: center; font-size: 18px; color:rgb(108, 30, 196);">
-                <p>Thinking...</p>
-                <div class="spinner"></div>
+                <!-- Thinking/Loading Message -->
+                <div id="loadingMessage" style="display:none; text-align: center; font-size: 18px; color:rgb(81, 97, 238);">
+                    <p>Thinking...</p>
+                    <div class="spinner"></div>
+                </div>
             </div>
 
-            <div id="answer" style="display:none;"></div>
+            <div id="answer" style="display:none;" class="section" onclick="copyToClipboard()"></div> <!-- Copy answer to clipboard -->
         </div>
+
         <div class="section">
-            <h3>Documents</h3>
+            <h3>Reference Documents</h3>
             <button id="toggleDocumentsButton" onclick="toggleDocuments()">Show Documents</button>
 
             <div id="documentsContainer" class="documents-container" style="display:none;">
@@ -205,6 +222,27 @@
 
     <script>
         let lastDeletedFilename = null;
+
+        // Clear the question input and answer
+        function clearFields() {
+            document.getElementById("question").value = '';
+            document.getElementById("answer").style.display = 'none';
+            document.getElementById("answer").textContent = ''; // Clear the answer content
+        }
+
+        // Copy answer to clipboard
+        function copyToClipboard() {
+            const answerText = document.getElementById("answer").textContent;
+            if (answerText) {
+                const textArea = document.createElement("textarea");
+                textArea.value = answerText;
+                document.body.appendChild(textArea);
+                textArea.select();
+                document.execCommand('copy');
+                document.body.removeChild(textArea);
+                alert("Answer copied to clipboard!");
+            }
+        }
 
         function loadDocuments() {
             fetch('/documents')
