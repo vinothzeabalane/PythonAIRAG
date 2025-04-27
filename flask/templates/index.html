@@ -58,6 +58,8 @@
             margin: 5px;
             padding: 5px;
             border-radius: 4px;
+            display: flex;
+            justify-content: space-between;
         }
         /* Hide document section by default */
         #documentsList {
@@ -69,6 +71,26 @@
             padding: 20px;
             background-color: #f9f9f9;
             border-radius: 8px;
+        }
+        #undoToast {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            background-color: #333;
+            color: white;
+            padding: 15px 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.3);
+            z-index: 9999;
+        }
+        #undoToast button {
+            background-color: #4CAF50;
+            border: none;
+            padding: 5px 10px;
+            color: white;
+            border-radius: 4px;
+            margin-left: 10px;
+            cursor: pointer;
         }
     </style>
 </head>
@@ -104,6 +126,8 @@
     </div>
 
     <script>
+        let lastDeletedFilename = null;
+
         function submitQuestion() {
             const question = document.getElementById('question').value;
             const fileInput = document.getElementById('fileUpload');
@@ -157,7 +181,10 @@
                 if (Array.isArray(data)) {
                     data.forEach(doc => {
                         const listItem = document.createElement("li");
-                        listItem.textContent = doc;
+                        listItem.innerHTML = `
+                            ${doc} 
+                            <button onclick="deleteDocument('${doc}')">Delete</button>
+                        `;
                         documentsList.appendChild(listItem);
                     });
                     // Show the document list
@@ -173,6 +200,82 @@
                 documentsList.style.display = 'none'; // Hide document list if error
             });
         }
+
+        // Delete document functionality
+        function deleteDocument(filename) {
+            if (!confirm(`Are you sure you want to delete "${filename}"?`)) {
+                return;
+            }
+
+            fetch('/delete_document', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ filename: filename })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    lastDeletedFilename = filename;
+                    showUndoToast(filename);
+                    loadDocuments();
+                } else {
+                    alert("Error: " + data.message);
+                }
+            });
+        }
+
+        // Show Undo toast after deletion
+        function showUndoToast(filename) {
+            // Remove existing toast if any
+            const existingToast = document.getElementById('undoToast');
+            if (existingToast) {
+                existingToast.remove();
+            }
+
+            const toast = document.createElement('div');
+            toast.id = 'undoToast';
+            toast.innerHTML = `
+                Deleted "${filename}" 
+                <button onclick="undoDelete()">Undo</button>
+            `;
+            document.body.appendChild(toast);
+
+            setTimeout(() => {
+                const toastStillThere = document.getElementById('undoToast');
+                if (toastStillThere) {
+                    toastStillThere.remove();
+                    lastDeletedFilename = null;
+                }
+            }, 8000); // 8 seconds to undo
+        }
+
+        // Undo the deletion of the document
+        function undoDelete() {
+            if (!lastDeletedFilename) return;
+
+            fetch('/restore_document', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ filename: lastDeletedFilename })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    alert("Document restored!");
+                    loadDocuments();
+                } else {
+                    alert("Error restoring: " + data.message);
+                }
+                const toast = document.getElementById('undoToast');
+                if (toast) toast.remove();
+                lastDeletedFilename = null;
+            });
+        }
     </script>
+
 </body>
 </html>

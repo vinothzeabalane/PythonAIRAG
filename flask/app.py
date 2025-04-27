@@ -193,6 +193,33 @@ def list_documents():
     except Exception as e:
         return jsonify({"error": str(e)}), 500
 
+@app.route("/delete", methods=["POST"])
+def delete_document():
+    """
+    Handles the deletion of a document uploaded to the server.
+    The request must contain the filename of the document to be deleted.
+    """
+    file_name = request.form.get("file_name")
+
+    if not file_name:
+        return jsonify({"error": "Please provide the filename to delete."}), 400
+
+    try:
+        # Path to the uploaded file
+        file_path = os.path.join('/data/flask/data', file_name)
+
+        # Check if the file exists
+        if os.path.exists(file_path):
+            os.remove(file_path)  # Delete the file
+            logging.info(f"Deleted file: {file_path}")
+            return jsonify({"message": f"File '{file_name}' deleted successfully."})
+        else:
+            return jsonify({"error": f"File '{file_name}' not found."}), 404
+
+    except Exception as e:
+        logging.error(f"Error deleting file: {e}")
+        return jsonify({"error": "Failed to delete the file."}), 500
+
 @app.route("/ask", methods=["POST"])
 def ask():
     """
