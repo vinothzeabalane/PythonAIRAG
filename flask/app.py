@@ -41,7 +41,7 @@ class LocalOllamaLLM(LLM):
         _call(prompt: str, stop: List[str]): Sends a prompt to the Ollama API and returns the response.
         _llm_type: Returns the type of LLM (Ollama).
     """
-    model_name: str = "llama3.2:3b"  # Define the model name for Ollama
+    model_name: str = "gemma3:1b"  # Define the model name for Ollama
     url: str = "http://10.74.134.8:11434/api/generate"  # URL for accessing the local Ollama API
 
     def _call(self, prompt: str, stop: List[str] = None) -> str:
