@@ -2,6 +2,7 @@ import logging
 from flask import Flask, render_template, request, jsonify
 import os
 import numpy as np
+import shutil
 from typing import List
 from langchain_core.language_models import LLM
 from langchain.chains import RetrievalQA
@@ -137,9 +138,11 @@ def delete_document():
         file_path = os.path.join('/data/flask/data', file_name)
 
         if os.path.exists(file_path):
-            os.remove(file_path)
-            logging.info(f"Deleted file: {file_path}")
-            return jsonify({"message": f"File '{file_name}' deleted successfully."})
+            # Move the file to the trash directory
+            trash_path = os.path.join('/data/flask/trash', file_name)
+            shutil.move(file_path, trash_path)
+            logging.info(f"Moved file to trash: {file_path}")
+            return jsonify({"message": f"File '{file_name}' deleted successfully. You can undo this action."})
         else:
             return jsonify({"error": f"File '{file_name}' not found."}), 404
 
@@ -147,7 +150,7 @@ def delete_document():
         logging.error(f"Error deleting file: {e}")
         return jsonify({"error": "Failed to delete the file."}), 500
 
-@app.route("/restore", methods=["POST"])
+@app.route("/undo-delete", methods=["POST"])
 def restore_document():
     data = request.get_json()
     filename = data.get("filename")
@@ -165,7 +168,7 @@ def restore_document():
             # Move the file back to its original location
             shutil.move(trash_path, original_path)
             logging.info(f"Restored file: {filename}")
-            return jsonify({"message": f"File '{filename}' restored successfully."})
+            return jsonify({"success": True, "message": f"File '{filename}' restored successfully."})
         else:
             return jsonify({"error": f"File '{filename}' not found in trash."}), 404
 

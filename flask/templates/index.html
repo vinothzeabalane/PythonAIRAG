@@ -197,7 +197,7 @@
                 </form>
 
                 <!-- Thinking/Loading Message -->
-                <div id="loadingMessage" style="display:none; text-align: center; font-size: 18px; color:rgb(81, 97, 238);">
+                <div id="loadingMessage" style="display:none; text-align: center; font-size: 18px; color:rgb(108, 30, 196);">
                     <p>Thinking...</p>
                     <div class="spinner"></div>
                 </div>
@@ -207,7 +207,7 @@
         </div>
 
         <div class="section">
-            <h3>Reference Documents</h3>
+            <h3>Documents</h3>
             <button id="toggleDocumentsButton" onclick="toggleDocuments()">Show Documents</button>
 
             <div id="documentsContainer" class="documents-container" style="display:none;">
@@ -318,8 +318,29 @@
         }
 
         function undoDelete(filename) {
-            alert("Undo deletion is not implemented yet.");
+            fetch('/undo-delete', {  // Backend endpoint to undo deletion
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ filename: filename })
+            })
+            .then(response => response.json())
+            .then(data => {
+                console.log("Restore response: ", data);  // Debugging line
+                if (data.message) {
+                    alert(`Restored file: ${filename}`);
+                    loadDocuments();
+                } else {
+                    alert(`Error: ${data.error || "Unknown error."}`);
+                }
+            })
+            .catch(error => {
+                console.error("Error restoring file: ", error);  // Debugging line
+                alert("Error restoring file: " + error);
+            });
         }
+        
 
         function toggleDocuments() {
             const documentsContainer = document.getElementById("documentsContainer");
