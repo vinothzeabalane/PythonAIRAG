@@ -183,3 +183,11 @@ Doc Storage:        In-memory (InMemoryDocstore)
                 +---------------------------+
                 |           End              |
                 +---------------------------+
+
+
+To Start:
+
+root@seyon_ollama_rag:/# cd /data/flask/.venv/bin/
+root@seyon_ollama_rag:/data/flask/.venv/bin# source activate
+(.venv) root@seyon_ollama_rag:/data/flask/.venv/bin# cd ../../
+(.venv) root@seyon_ollama_rag:/data/flask# python app.py 

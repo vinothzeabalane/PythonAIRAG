@@ -142,30 +142,8 @@ def load_documents(directory="/data/flask/data"):
 embedding_model = HuggingFaceEmbeddings(model_name="sentence-transformers/all-MiniLM-L6-v2")
 logging.info("Embedding model loaded.")
 
-# Generate embeddings for all documents once and cache them in memory
-documents = load_documents()
-document_embeddings = [embedding_model.embed_query(doc.page_content) for doc in documents]
-logging.info(f"Generated embeddings for {len(document_embeddings)} chunks.")
-
-# Initialize the FAISS index and add the embeddings
-dim = len(document_embeddings[0])
-index = faiss.IndexFlatL2(dim)
-embeddings_np = np.array(document_embeddings).astype('float32')
-index.add(embeddings_np)
-
-# Set up the FAISS vector store
-docstore = InMemoryDocstore({str(i): doc for i, doc in enumerate(documents)})
-index_to_docstore_id = {i: str(i) for i in range(len(documents))}
-
-vector_db = FAISS(
-    embedding_function=embedding_model,
-    index=index,
-    docstore=docstore,
-    index_to_docstore_id=index_to_docstore_id
-)
-
 # 🔹 Main RAG pipeline function
-def get_answer_from_documents(question: str):
+def get_answer_from_documents(question: str, vector_db):
     """
     Retrieves an answer to a user's question by searching documents and using the RAG (Retrieval-Augmented Generation) chain.
 
@@ -190,9 +168,6 @@ def get_answer_from_documents(question: str):
 def index():
     """
     Renders the main index page for the application.
-
-    Returns:
-        str: The rendered HTML template for the homepage.
     """
     return render_template("index.html")
 
@@ -200,9 +175,6 @@ def index():
 def list_documents():
     """
     Lists all documents present in the data directory.
-
-    Returns:
-        jsonify: A JSON response containing the list of document names.
     """
     try:
         docs = os.listdir("/data/flask/data")
@@ -214,9 +186,6 @@ def list_documents():
 def ask():
     """
     Handles the user input for asking a question or uploading a file for question-answering.
-
-    Returns:
-        jsonify: A JSON response containing the answer and processing time.
     """
     question = request.form.get("question")
     file = request.files.get("file")
@@ -243,8 +212,30 @@ def ask():
             logging.error(f"Error saving the file: {e}")
             return jsonify({"error": "Failed to save the uploaded file."}), 500
 
+    # Reload documents and update FAISS index
+    documents = load_documents(upload_dir)  # Reload all documents
+    document_embeddings = [embedding_model.embed_query(doc.page_content) for doc in documents]
+    logging.info(f"Generated embeddings for {len(document_embeddings)} chunks.")
+
+    # Initialize the FAISS index and add the new embeddings
+    dim = len(document_embeddings[0])
+    index = faiss.IndexFlatL2(dim)
+    embeddings_np = np.array(document_embeddings).astype('float32')
+    index.add(embeddings_np)
+
+    # Set up the FAISS vector store
+    docstore = InMemoryDocstore({str(i): doc for i, doc in enumerate(documents)})
+    index_to_docstore_id = {i: str(i) for i in range(len(documents))}
+
+    vector_db = FAISS(
+        embedding_function=embedding_model,
+        index=index,
+        docstore=docstore,
+        index_to_docstore_id=index_to_docstore_id
+    )
+
     # Process the question with the newly uploaded document
-    answer = get_answer_from_documents(question)
+    answer = get_answer_from_documents(question, vector_db)
     
     end_time = time.time()
     elapsed_time = end_time - start_time
