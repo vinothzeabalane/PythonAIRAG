@@ -1,408 +1,417 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
+  <head>
+    <meta charset="UTF-8" />
     <title>Ask AI</title>
     <style>
-        /* General body styling */
-        body {
-            font-family: 'Arial', sans-serif;
-            margin: 0;
-            background-color: #f0f4f8;
-            color: #333;
+      /* General body styling */
+      body {
+        font-family: 'Arial', sans-serif;
+        margin: 0;
+        background-color: #f0f4f8;
+        color: #333;
+      }
+      
+      header {
+        display: flex;
+        align-items: center;
+        background-color: #6a1b9a; /* Purple header */
+        color: white;
+        padding: 20px 40px;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+      }
+      
+      #logo {
+        height: 50px;
+        margin-right: 20px;
+      }
+      
+      h2 {
+        font-size: 24px;
+        margin: 0;
+      }
+      
+      /* Layout styling for the main container */
+      .container {
+        display: flex;
+        flex-direction: column;
+        gap: 30px;
+        margin: 20px 40px;
+      }
+      
+      .ask-section {
+        display: flex;
+        flex-direction: column;
+        gap: 20px;
+      }
+      
+      .answer-section {
+        display: flex;
+        gap: 30px;
+      }
+      
+      .section {
+        background: white;
+        padding: 20px;
+        border-radius: 8px;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        width: 100%;
+      }
+      
+      h3 {
+        margin-bottom: 15px;
+        font-size: 20px;
+        color: #444;
+      }
+      
+      textarea {
+        width: 100%;
+        height: 200px;
+        padding: 12px;
+        font-size: 16px;
+        border: 1px solid #ccc;
+        border-radius: 8px;
+        margin-bottom: 20px;
+        box-sizing: border-box;
+        resize: none;
+      }
+      
+      input[type='file'] {
+        margin-bottom: 20px;
+      }
+      
+      button {
+        padding: 12px 20px;
+        font-size: 16px;
+        background-color: #007bff;
+        color: white;
+        border: none;
+        border-radius: 8px;
+        cursor: pointer;
+        transition: background-color 0.3s;
+      }
+      
+      button:hover {
+        background-color: #0056b3;
+      }
+      
+      /* Answer styling */
+      #answer {
+        white-space: pre-wrap;
+        font-size: 16px;
+        padding: 15px;
+        background-color: #f5f5f5;
+        border: 1px solid #ddd;
+        height: 200px;
+        overflow-y: auto;
+        border-radius: 8px;
+        flex: 1; /* Ensures the answer section takes up remaining space */
+        cursor: pointer; /* Indicates that the answer can be clicked for copying */
+      }
+      
+      /* Documents list styling */
+      .documents-container {
+        background-color: white;
+        padding: 20px;
+        border-radius: 8px;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        width: 100%;
+        margin-top: 20px;
+      }
+      
+      #documentsList {
+        margin-top: 15px;
+        padding-left: 0;
+      }
+      
+      #documentsList li {
+        background: #f1f1f1;
+        margin: 5px;
+        padding: 8px;
+        border-radius: 4px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+      }
+      
+      /* Toast Notification styling */
+      #undoToast {
+        position: fixed;
+        bottom: 30px;
+        right: 30px;
+        background-color: #333;
+        color: white;
+        padding: 12px 20px;
+        border-radius: 8px;
+        box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+        z-index: 9999;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        transition: opacity 0.5s ease;
+      }
+      
+      #undoToast button {
+        background-color: #28a745;
+        border: none;
+        padding: 8px 15px;
+        color: white;
+        border-radius: 4px;
+        cursor: pointer;
+      }
+      
+      #undoToast.fade-out {
+        opacity: 0;
+      }
+      
+      /* Spinner animation */
+      @keyframes spin {
+        0% {
+          transform: rotate(0deg);
         }
-
-        header {
-            display: flex;
-            align-items: center;
-            background-color: #6a1b9a; /* Purple header */
-            color: white;
-            padding: 20px 40px;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        100% {
+          transform: rotate(360deg);
         }
-
-        #logo {
-            height: 50px;
-            margin-right: 20px;
-        }
-
-        h2 {
-            font-size: 24px;
-            margin: 0;
-        }
-
-        /* Layout styling for the main container */
-        .container {
-            display: flex;
-            flex-direction: column;
-            gap: 30px;
-            margin: 20px 40px;
-        }
-
-        .ask-section {
-            display: flex;
-            flex-direction: column;
-            gap: 20px;
-        }
-
-        .answer-section {
-            display: flex;
-            gap: 30px;
-        }
-
-        .section {
-            background: white;
-            padding: 20px;
-            border-radius: 8px;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-            width: 100%;
-        }
-
-        h3 {
-            margin-bottom: 15px;
-            font-size: 20px;
-            color: #444;
-        }
-
-        textarea {
-            width: 100%;
-            height: 200px;
-            padding: 12px;
-            font-size: 16px;
-            border: 1px solid #ccc;
-            border-radius: 8px;
-            margin-bottom: 20px;
-            box-sizing: border-box;
-            resize: none;
-        }
-
-        input[type="file"] {
-            margin-bottom: 20px;
-        }
-
-        button {
-            padding: 12px 20px;
-            font-size: 16px;
-            background-color: #007bff;
-            color: white;
-            border: none;
-            border-radius: 8px;
-            cursor: pointer;
-            transition: background-color 0.3s;
-        }
-
-        button:hover {
-            background-color: #0056b3;
-        }
-
-        /* Answer styling */
-        #answer {
-            white-space: pre-wrap;
-            font-size: 16px;
-            padding: 15px;
-            background-color: #f5f5f5;
-            border: 1px solid #ddd;
-            height: 200px;
-            overflow-y: auto;
-            border-radius: 8px;
-            flex: 1; /* Ensures the answer section takes up remaining space */
-            cursor: pointer; /* Indicates that the answer can be clicked for copying */
-        }
-
-        /* Documents list styling */
-        .documents-container {
-            background-color: white;
-            padding: 20px;
-            border-radius: 8px;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-            width: 100%;
-            margin-top: 20px;
-        }
-
-        #documentsList {
-            margin-top: 15px;
-            padding-left: 0;
-        }
-
-        #documentsList li {
-            background: #f1f1f1;
-            margin: 5px;
-            padding: 8px;
-            border-radius: 4px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        /* Toast Notification styling */
-        #undoToast {
-            position: fixed;
-            bottom: 30px;
-            right: 30px;
-            background-color: #333;
-            color: white;
-            padding: 12px 20px;
-            border-radius: 8px;
-            box-shadow: 0 2px 6px rgba(0,0,0,0.3);
-            z-index: 9999;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            transition: opacity 0.5s ease;
-        }
-
-        #undoToast button {
-            background-color: #28a745;
-            border: none;
-            padding: 8px 15px;
-            color: white;
-            border-radius: 4px;
-            cursor: pointer;
-        }
-
-        #undoToast.fade-out {
-            opacity: 0;
-        }
-
-        /* Spinner animation */
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-        }
-
-        .spinner {
-            border: 4px solid #f3f3f3;
-            border-top: 4px solid #007bff;
-            border-radius: 50%;
-            width: 40px;
-            height: 40px;
-            animation: spin 2s linear infinite;
-        }
+      }
+      
+      .spinner {
+        border: 4px solid #f3f3f3;
+        border-top: 4px solid #007bff;
+        border-radius: 50%;
+        width: 40px;
+        height: 40px;
+        animation: spin 2s linear infinite;
+      }
     </style>
-</head>
-<body>
+  </head>
+  <body>
     <header>
-        <img id="logo" src="static/PS.jpg" alt="Logo"> 
-        <h2>PS Runbot</h2>
+      <img id="logo" src="static/PS.jpg" alt="Logo" />
+      <h2>PS Runbot</h2>
     </header>
     <div class="container">
-        <div class="ask-section">
-            <div class="section">
-                <h3>Ask a Question</h3>
-                <form id="askForm" enctype="multipart/form-data">
-                    <textarea id="question" name="question" placeholder="Ask your question here..."></textarea>
-                    <input type="file" id="file" name="file">
-                    <button type="submit">Ask</button>
-                    <button type="button" id="clearButton" onclick="clearFields()">Clear</button> <!-- Clear Button -->
-                </form>
-
-                <!-- Thinking/Loading Message -->
-                <div id="loadingMessage" style="display:none; text-align: center; font-size: 18px; color:rgb(108, 30, 196);">
-                    <p>Thinking...</p>
-                    <div class="spinner"></div>
-                </div>
-            </div>
-
-            <div id="answer" style="display:none;" class="section" onclick="copyToClipboard()"></div> <!-- Copy answer to clipboard -->
-        </div>
-
+      <div class="ask-section">
         <div class="section">
-            <h3>Documents</h3>
-            <button id="toggleDocumentsButton" onclick="toggleDocuments()">Show Documents</button>
+          <h3>Ask a Question</h3>
+          <form id="askForm" enctype="multipart/form-data">
+            <textarea id="question" name="question" placeholder="Ask your question here..."></textarea>
+            <input type="file" id="file" name="file" />
+            <button type="submit">Ask</button>
+            <button type="button" id="clearButton" onclick="clearFields()">Clear</button> <!-- Clear Button -->
+          </form>
 
-            <div id="documentsContainer" class="documents-container" style="display:none;">
-                <ul id="documentsList"></ul>
-            </div>
+          <!-- Thinking/Loading Message -->
+          <div id="loadingMessage" style="display:none; text-align: center; font-size: 18px; color:rgb(108, 30, 196);">
+            <p>Thinking...</p>
+            <div class="spinner"></div>
+          </div>
         </div>
+
+        <div id="answer" style="display:none;" class="section" onclick="copyToClipboard()"></div> <!-- Copy answer to clipboard -->
+      </div>
+
+      <div class="section">
+        <h3>Documents</h3>
+        <button id="toggleDocumentsButton" onclick="toggleDocuments()">Show Documents</button>
+
+        <div id="documentsContainer" class="documents-container" style="display:none;">
+          <ul id="documentsList"></ul>
+        </div>
+      </div>
     </div>
     <div id="undoToast" style="display: none;">
-        <span id="toastMessage"></span>
-        <button id="undoDeleteButton">Undo</button>
+      <span id="toastMessage"></span>
+      <button id="undoDeleteButton">Undo</button>
     </div>
 
     <script>
-        let lastDeletedFilename = null;
-
-        // Clear the question input and answer
-        function clearFields() {
-            document.getElementById("question").value = '';
-            document.getElementById("answer").style.display = 'none';
-            document.getElementById("answer").textContent = ''; // Clear the answer content
+      let lastDeletedFilename = null
+      
+      // Clear the question input and answer
+      function clearFields() {
+        document.getElementById('question').value = ''
+        document.getElementById('answer').style.display = 'none'
+        document.getElementById('answer').textContent = '' // Clear the answer content
+      }
+      
+      // Copy answer to clipboard
+      function copyToClipboard() {
+        const answerText = document.getElementById('answer').textContent
+        if (answerText) {
+          const textArea = document.createElement('textarea')
+          textArea.value = answerText
+          document.body.appendChild(textArea)
+          textArea.select()
+          document.execCommand('copy')
+          document.body.removeChild(textArea)
+          alert('Answer copied to clipboard!')
         }
-
-        // Copy answer to clipboard
-        function copyToClipboard() {
-            const answerText = document.getElementById("answer").textContent;
-            if (answerText) {
-                const textArea = document.createElement("textarea");
-                textArea.value = answerText;
-                document.body.appendChild(textArea);
-                textArea.select();
-                document.execCommand('copy');
-                document.body.removeChild(textArea);
-                alert("Answer copied to clipboard!");
-            }
-        }
-
-        function loadDocuments() {
-            fetch('/documents')
-                .then(response => response.json())
-                .then(docs => {
-                    const listContainer = document.getElementById("documentsList");
-                    listContainer.innerHTML = '';  // Clear previous list
-
-                    if (docs.length === 0) {
-                        listContainer.innerHTML = '<li>No documents found.</li>';
-                    } else {
-                        docs.forEach(doc => {
-                            const listItem = document.createElement('li');
-                            listItem.textContent = doc;
-                            const deleteButton = document.createElement('button');
-                            deleteButton.textContent = "Delete";
-                            deleteButton.onclick = () => deleteDocument(doc);
-                            listItem.appendChild(deleteButton);
-                            listContainer.appendChild(listItem);
-                        });
-                    }
-                })
-                .catch(error => {
-                    alert("Error loading documents: " + error);
-                });
-        }
-
-        function deleteDocument(filename) {
-            if (!confirm(`Are you sure you want to delete "${filename}"?`)) {
-                return;
-            }
-
-            fetch('/delete', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({ filename: filename })
-            })
-            .then(response => response.json())
-            .then(data => {
-                if (data.message) {
-                    lastDeletedFilename = filename;
-                    showUndoToast(filename);
-                    loadDocuments();
-                } else {
-                    alert("Error: " + data.message);
-                }
-            })
-            .catch(error => {
-                alert("Error: " + error);
-            });
-        }
-
-        function showUndoToast(filename) {
-            const toast = document.getElementById('undoToast');
-            const message = document.getElementById('toastMessage');
-            const undoButton = document.getElementById('undoDeleteButton');
-
-            message.textContent = `Deleted file: ${filename}`;
-            undoButton.onclick = () => undoDelete(filename);
-
-            toast.style.display = 'flex';
-
-            setTimeout(() => {
-                toast.classList.add('fade-out');
-            }, 4000);
-
-            setTimeout(() => {
-                toast.style.display = 'none';
-                toast.classList.remove('fade-out');
-            }, 4500);
-        }
-
-        function undoDelete(filename) {
-            fetch('/undo-delete', {  // Backend endpoint to undo deletion
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({ filename: filename })
-            })
-            .then(response => response.json())
-            .then(data => {
-                console.log("Restore response: ", data);  // Debugging line
-                if (data.message) {
-                    alert(`Restored file: ${filename}`);
-                    loadDocuments();
-                } else {
-                    alert(`Error: ${data.error || "Unknown error."}`);
-                }
-            })
-            .catch(error => {
-                console.error("Error restoring file: ", error);  // Debugging line
-                alert("Error restoring file: " + error);
-            });
-        }
-        
-
-        function toggleDocuments() {
-            const documentsContainer = document.getElementById("documentsContainer");
-            const toggleButton = document.getElementById("toggleDocumentsButton");
-
-            if (documentsContainer.style.display === "none") {
-                documentsContainer.style.display = "block";
-                toggleButton.textContent = "Hide Documents";
-                loadDocuments(); // Load documents when showing
+      }
+      
+      function loadDocuments() {
+        fetch('/documents')
+          .then((response) => response.json())
+          .then((docs) => {
+            const listContainer = document.getElementById('documentsList')
+            listContainer.innerHTML = '' // Clear previous list
+      
+            if (docs.length === 0) {
+              listContainer.innerHTML = '<li>No documents found.</li>'
             } else {
-                documentsContainer.style.display = "none";
-                toggleButton.textContent = "Show Documents";
+              docs.forEach((doc) => {
+                const listItem = document.createElement('li')
+                listItem.textContent = doc
+                const deleteButton = document.createElement('button')
+                deleteButton.textContent = 'Delete'
+                deleteButton.onclick = () => deleteDocument(doc)
+                listItem.appendChild(deleteButton)
+                listContainer.appendChild(listItem)
+              })
             }
+          })
+          .catch((error) => {
+            alert('Error loading documents: ' + error)
+          })
+      }
+      
+      function deleteDocument(filename) {
+        if (!confirm(`Are you sure you want to delete "${filename}"?`)) {
+          return
         }
-
-        // Form submission to ask a question
-        document.getElementById("askForm").addEventListener("submit", function(event) {
-            event.preventDefault();
-
-            // Show the "Thinking..." message
-            document.getElementById("loadingMessage").style.display = "block";
-
-            // Hide the answer area initially
-            document.getElementById("answer").style.display = "none";
-
-            const question = document.getElementById("question").value;
-            const file = document.getElementById("file").files[0];
-            const formData = new FormData();
-
-            formData.append('question', question);
-            if (file) {
-                formData.append('file', file);
+      
+        fetch('/delete', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({ filename: filename })
+        })
+          .then((response) => response.json())
+          .then((data) => {
+            if (data.message) {
+              lastDeletedFilename = filename
+              showUndoToast(filename)
+              loadDocuments()
+            } else {
+              alert('Error: ' + data.message)
             }
-
-            fetch('/ask', {
-                method: 'POST',
-                body: formData
-            })
-            .then(response => response.json())
-            .then(data => {
-                // Hide the "Thinking..." message
-                document.getElementById("loadingMessage").style.display = "none";
-
-                // Display the answer
-                if (data.answer) {
-                    document.getElementById("answer").textContent = data.answer;
-                    document.getElementById("answer").style.display = "block"; // Make answer visible
-                }
-                if (data.time) {
-                    console.log(`Time taken: ${data.time}`);
-                }
-            })
-            .catch(error => {
-                // Hide the "Thinking..." message in case of error
-                document.getElementById("loadingMessage").style.display = "none";
-
-                console.error("Error asking the question:", error);
-                alert("Error asking the question.");
-            });
-        });
-
-        loadDocuments();  // Load documents when the page loads
+          })
+          .catch((error) => {
+            alert('Error: ' + error)
+          })
+      }
+      
+      function showUndoToast(filename) {
+        const toast = document.getElementById('undoToast')
+        const message = document.getElementById('toastMessage')
+        const undoButton = document.getElementById('undoDeleteButton')
+      
+        message.textContent = `Deleted file: ${filename}`
+        undoButton.onclick = () => undoDelete(filename)
+      
+        toast.style.display = 'flex'
+      
+        setTimeout(() => {
+          toast.classList.add('fade-out')
+        }, 4000)
+      
+        setTimeout(() => {
+          toast.style.display = 'none'
+          toast.classList.remove('fade-out')
+        }, 4500)
+      }
+      
+      function undoDelete(filename) {
+        fetch('/undo-delete', {
+          // Backend endpoint to undo deletion
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({ filename: filename })
+        })
+          .then((response) => response.json())
+          .then((data) => {
+            console.log('Restore response: ', data) // Debugging line
+            if (data.message) {
+              alert(`Restored file: ${filename}`)
+              loadDocuments()
+            } else {
+              alert(`Error: ${data.error || 'Unknown error.'}`)
+            }
+          })
+          .catch((error) => {
+            console.error('Error restoring file: ', error) // Debugging line
+            alert('Error restoring file: ' + error)
+          })
+      }
+      
+      function toggleDocuments() {
+        const documentsContainer = document.getElementById('documentsContainer')
+        const toggleButton = document.getElementById('toggleDocumentsButton')
+      
+        if (documentsContainer.style.display === 'none') {
+          documentsContainer.style.display = 'block'
+          toggleButton.textContent = 'Hide Documents'
+          loadDocuments() // Load documents when showing
+        } else {
+          documentsContainer.style.display = 'none'
+          toggleButton.textContent = 'Show Documents'
+        }
+      }
+      
+      // Form submission to ask a question
+      // Form submission to ask a question
+      document.getElementById('askForm').addEventListener('submit', function (event) {
+        event.preventDefault()
+      
+        // Show the "Thinking..." message
+        document.getElementById('loadingMessage').style.display = 'block'
+      
+        // Hide the answer area initially
+        document.getElementById('answer').style.display = 'none'
+      
+        const question = document.getElementById('question').value
+        const file = document.getElementById('file').files[0]
+        const formData = new FormData()
+      
+        formData.append('question', question)
+        if (file) {
+          formData.append('file', file)
+        }
+      
+        fetch('/ask', {
+          method: 'POST',
+          body: formData
+        })
+          .then((response) => response.json())
+          .then((data) => {
+            // Hide the "Thinking..." message
+            document.getElementById('loadingMessage').style.display = 'none'
+      
+            if (data.error) {
+              // Show the error/warning to the user if no documents found
+              alert(data.error) // You can display it more elegantly in the UI instead of alert()
+            } else if (data.answer) {
+              // Display the answer
+              document.getElementById('answer').textContent = data.answer
+              document.getElementById('answer').style.display = 'block' // Make answer visible
+            }
+      
+            if (data.time) {
+              console.log(`Time taken: ${data.time}`)
+            }
+          })
+          .catch((error) => {
+            // Hide the "Thinking..." message in case of error
+            document.getElementById('loadingMessage').style.display = 'none'
+      
+            console.error('Error asking the question:', error)
+            alert('Error asking the question.')
+          })
+      })
+      
+      loadDocuments() // Load documents when the page loads
     </script>
-</body>
+  </body>
 </html>

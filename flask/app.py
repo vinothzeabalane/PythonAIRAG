@@ -210,25 +210,46 @@ def ask():
             return jsonify({"error": "Failed to save the uploaded file."}), 500
 
     documents = load_documents(upload_dir)
+
+    # Log warning and send a warning response if no documents are found
+    if not documents:
+        logging.warning("No documents found to process.")  # Log the warning
+        return jsonify({"error": "No reference documents found."}), 404  # Show warning to the user
+
     document_embeddings = [embedding_model.embed_query(doc.page_content) for doc in documents]
+
+    if not document_embeddings:
+        logging.error("Failed to generate embeddings for documents.")
+        return jsonify({"error": "Failed to generate embeddings for documents."}), 500
+
     logging.info(f"Generated embeddings for {len(document_embeddings)} chunks.")
 
-    dim = len(document_embeddings[0])
-    index = faiss.IndexFlatL2(dim)
-    embeddings_np = np.array(document_embeddings).astype('float32')
-    index.add(embeddings_np)
+    try:
+        dim = len(document_embeddings[0]) if document_embeddings else 0
 
-    docstore = InMemoryDocstore({str(i): doc for i, doc in enumerate(documents)})
-    index_to_docstore_id = {i: str(i) for i in range(len(documents))}
+        if dim == 0:
+            logging.error("Error: Embeddings dimension is zero.")
+            return jsonify({"error": "Error in embedding generation (dimension is zero)."}), 500
 
-    vector_db = FAISS(
-        embedding_function=embedding_model,
-        index=index,
-        docstore=docstore,
-        index_to_docstore_id=index_to_docstore_id
-    )
+        index = faiss.IndexFlatL2(dim)
+        embeddings_np = np.array(document_embeddings).astype('float32')
+        index.add(embeddings_np)
 
-    answer = get_answer_from_documents(question, vector_db)
+        docstore = InMemoryDocstore({str(i): doc for i, doc in enumerate(documents)})
+        index_to_docstore_id = {i: str(i) for i in range(len(documents))}
+
+        vector_db = FAISS(
+            embedding_function=embedding_model,
+            index=index,
+            docstore=docstore,
+            index_to_docstore_id=index_to_docstore_id
+        )
+
+        answer = get_answer_from_documents(question, vector_db)
+
+    except Exception as e:
+        logging.error(f"Error processing the question or generating the answer: {e}")
+        return jsonify({"error": "Error processing the question."}), 500
 
     end_time = time.time()
     elapsed_time = end_time - start_time
