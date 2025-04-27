@@ -41,4 +41,7 @@ coverage.xml
 server_info.md
 
 /data
+/trash
 /flask/data
+
+/flask/trash
