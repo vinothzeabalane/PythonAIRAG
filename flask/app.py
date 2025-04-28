@@ -1,5 +1,5 @@
 import logging
-from flask import Flask, render_template, request, jsonify
+from flask import Flask, render_template, request, jsonify, send_from_directory
 import os
 import numpy as np
 import shutil
@@ -23,6 +23,8 @@ import requests
 
 # Set environment variable to enforce offline mode for HuggingFace
 os.environ["HF_HUB_OFFLINE"] = "1"
+DATA_FOLDER = '/data/flask/data'  # Full path to your documents
+TRASH_FOLDER = '/data/flask/trash'  # Full path to your trash directory
 
 # Set up logging with INFO level
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
@@ -120,7 +122,7 @@ def index():
 @app.route('/documents')
 def get_documents():
     # Assuming files are stored in the '/data/flask/data' folder
-    documents = os.listdir('/data/flask/data')
+    documents = os.listdir(DATA_FOLDER)
     return jsonify(documents)
 
 
@@ -135,7 +137,7 @@ def delete_document():
     file_name = data['filename']
 
     try:
-        file_path = os.path.join('/data/flask/data', file_name)
+        file_path = os.path.join(DATA_FOLDER, file_name)
 
         if os.path.exists(file_path):
             # Move the file to the trash directory
@@ -160,8 +162,8 @@ def restore_document():
 
     try:
         # Define original path and trash path
-        original_path = os.path.join('/data/flask/data', filename)
-        trash_path = os.path.join('/data/flask/trash', filename)
+        original_path = os.path.join(DATA_FOLDER, filename)
+        trash_path = os.path.join(TRASH_FOLDER, filename)
 
         # Check if the file exists in the trash
         if os.path.exists(trash_path):
@@ -176,6 +178,13 @@ def restore_document():
         logging.error(f"Error restoring file: {e}")
         return jsonify({"error": "Failed to restore the file."}), 500
 
+# Route to view a document
+@app.route('/view/<path:filename>')
+def view_file(filename):
+    try:
+        return send_from_directory(DATA_FOLDER, filename, as_attachment=False)
+    except Exception as e:
+        return jsonify({'error': str(e)}), 404
 
 @app.errorhandler(404)
 def page_not_found(error):
@@ -195,7 +204,7 @@ def ask():
 
     start_time = time.time()
 
-    upload_dir = '/data/flask/data'
+    upload_dir = DATA_FOLDER
     if not os.path.exists(upload_dir):
         os.makedirs(upload_dir)
         logging.info(f"The directory was created at: {os.path.abspath(upload_dir)}")

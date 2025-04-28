@@ -79,6 +79,21 @@
       input[type='file'] {
         margin-bottom: 20px;
       }
+
+      #documentsList li {
+        background: #f1f1f1;
+        margin: 5px 0;
+        padding: 8px 12px;
+        border-radius: 6px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+      }
+      
+      .document-actions {
+        display: flex;
+        gap: 8px;
+      }
       
       button {
         padding: 12px 20px;
@@ -252,26 +267,44 @@
         fetch('/documents')
           .then((response) => response.json())
           .then((docs) => {
-            const listContainer = document.getElementById('documentsList')
-            listContainer.innerHTML = '' // Clear previous list
+            const listContainer = document.getElementById('documentsList');
+            listContainer.innerHTML = ''; // Clear previous list
       
             if (docs.length === 0) {
-              listContainer.innerHTML = '<li>No documents found.</li>'
+              listContainer.innerHTML = '<li>No documents found.</li>';
             } else {
               docs.forEach((doc) => {
-                const listItem = document.createElement('li')
-                listItem.textContent = doc
-                const deleteButton = document.createElement('button')
-                deleteButton.textContent = 'Delete'
-                deleteButton.onclick = () => deleteDocument(doc)
-                listItem.appendChild(deleteButton)
-                listContainer.appendChild(listItem)
-              })
+                const listItem = document.createElement('li');
+              
+                const docName = document.createElement('span');
+                docName.textContent = doc;
+              
+                const actions = document.createElement('div');
+                actions.className = 'document-actions';
+              
+                // View button
+                const viewButton = document.createElement('button');
+                viewButton.textContent = 'View';
+                viewButton.onclick = () => window.open(`/view/${encodeURIComponent(doc)}`, '_blank');
+              
+                // Delete button
+                const deleteButton = document.createElement('button');
+                deleteButton.textContent = 'Delete';
+                deleteButton.onclick = () => deleteDocument(doc);
+              
+                actions.appendChild(viewButton);
+                actions.appendChild(deleteButton);
+              
+                listItem.appendChild(docName);
+                listItem.appendChild(actions);
+                listContainer.appendChild(listItem);
+              });
+              
             }
           })
           .catch((error) => {
-            alert('Error loading documents: ' + error)
-          })
+            alert('Error loading documents: ' + error);
+          });
       }
       
       function deleteDocument(filename) {
