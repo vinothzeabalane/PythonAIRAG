@@ -33,7 +33,7 @@ class LocalOllamaLLM(LLM):
     """
     Custom Language Model (LLM) for interacting with the Ollama model via an API.
     """
-    model_name: str = "gemma3:1b"
+    model_name: str = "llama3.2:3b"
     url: str = "http://10.74.134.8:11434/api/generate"
 
     def _call(self, prompt: str, stop: List[str] = None) -> str:
