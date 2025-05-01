@@ -45,3 +45,5 @@ server_info.md
 /flask/data
 
 /flask/trash
+/flask/.env
+/flask/uploads
